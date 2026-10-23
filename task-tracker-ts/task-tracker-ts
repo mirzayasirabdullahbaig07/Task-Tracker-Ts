@@ -1,0 +1,18 @@
+export function mapAsyncState<T, U>(
+  state: AsyncState<T>,
+  fn: (data: T) => U
+): AsyncState<U> {
+  switch (state.status) {
+    case "success":
+      return { status: "success", data: fn(state.data) };
+    case "loading":
+      return { status: "loading" };
+    case "empty":
+      return { status: "empty" };
+    case "error":
+      return { status: "error", message: state.message };
+    default:
+      // Using the helper from earlier ensures compile-time safety
+      return assertNever(state); 
+  }
+}
